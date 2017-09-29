@@ -1,7 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import { log } from '../../actions/log';
+import { log, asyncLog } from '../../actions/log';
+import { IconButton, Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui';
+
+import IngredientIcon from 'material-ui/svg-icons/image/adjust';
+import HomeIcon from 'material-ui/svg-icons/action/home';
+
+import Home from '../Home/Home';
+import IngredinetList from '../Ingredient/Ingredient.jsx';
+
+
+
+class NavBarBase extends React.Component {
+  render() {
+    return (
+      <div>
+        <Toolbar>
+          <ToolbarTitle text="Lunch Time" />
+          <ToolbarGroup>
+            <IconButton onClick={() => this.props.history.push('/')}><HomeIcon /></IconButton>
+            <IconButton onClick={() => this.props.history.push('/ingredient/')}><IngredientIcon /></IconButton>
+          </ToolbarGroup>
+        </Toolbar>
+      </div>
+    )
+  }
+}
+const NavBar = withRouter(NavBarBase);
+
+
 
 class Root extends Component {
   constructor() {
@@ -10,33 +39,27 @@ class Root extends Component {
   }
   getInitState = () => ({})
   componentDidMount() {
-    this.props.log('Root mount')
+    //this.props.log("Root mount");
+    //this.props.asyncLog("Async Root mount");
   }
   render() {
-    console.log(this.props.logs);
     return (
       <Router>
         <div>
-          <div>
-            <ul>
-              <li><Link to='/'>Home</Link></li>
-              <li><Link to='/about'>About</Link></li>
-            </ul>
-          </div>
-          <Route exact path='/' component={() => <h1>Home</h1>}/>
-          <Route exact path='/about' component={() => <h1>About</h1>}/>
+          <NavBar />
+          <Route exact path='/' component={Home}/>
+          <Route exact path='/ingredient/' component={IngredinetList}/>
         </div>
       </Router>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  logs: state.logs
-})
+const mapStateToProps = (state) => ({})
 
 const mapDispatchToProps = {
-  log: log
+  log,
+  asyncLog
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Root)
+export default connect(mapStateToProps, mapDispatchToProps)(Root);

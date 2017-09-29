@@ -4,9 +4,8 @@ const logs = (state = [], action) => {
 		case '@@redux/INIT':
 			break;
 		case 'LOG':
+		console.log(action.payload);
 			newState.push(action.payload);
-		default:
-			console.log(`ACTION`, action);
 	}
 	return newState;
 }
